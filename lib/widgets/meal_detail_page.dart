@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import '/models/meal_model.dart';
 import '/widgets/components/youtube_video.dart';
-import '/models/database.dart';
-import '/widgets/favourite.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class MealDetailPage extends StatefulWidget {
   final Meal meal;
-  final VoidCallback? toggleFavorite;
 
-  MealDetailPage({required this.meal, this.toggleFavorite});
+  MealDetailPage({required this.meal});
 
   @override
   _MealDetailPageState createState() => _MealDetailPageState();
@@ -17,60 +13,6 @@ class MealDetailPage extends StatefulWidget {
 
 class _MealDetailPageState extends State<MealDetailPage> {
   bool isFavorite = false;
-  late String _userEmail;
-
-  @override
-  void initState() {
-
-    super.initState();
-    checkFavorite();
-    _getUserEmail().then((email) {
-      setState(() {
-        _userEmail = email;
-        print("Email :" + _userEmail);
-        print("Check is a ${checkFavorite()}");
-      });
-    });
-  }
-
-  Future<String> _getUserEmail() async {
-    User? currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser != null && currentUser.email != null) {
-      return currentUser.email!;
-    } else {
-      return '';
-    }
-  }
-
-  Future<void> checkFavorite() async {
-    bool isFav = await Favourite.Check(widget.meal.strMeal ?? '', _userEmail);
-    setState(() {
-      isFavorite = isFav;
-    });
-    print("Check is  $isFav");
-  }
-
-  Future<void> toggleFavorite() async {
-    setState(() {
-      isFavorite = !isFavorite;
-    });
-    if (isFavorite) {
-      await _insertMeal(_userEmail, widget.meal.strMeal!);
-    } else {
-      await deleteMeal(widget.meal.strMeal!);
-    }
-    widget.toggleFavorite!();
-    //checkFavorite();
-  }
-
-  Future<void> _insertMeal(String user_email, String meal_name) async {
-    await Favourite.insertMeal(MealDB(user_email: user_email, meal_name: meal_name));
-  }
-
-  Future<void> deleteMeal(String meal_name) async {
-    await Favourite.deleteMeal(meal_name, _userEmail);
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +23,11 @@ class _MealDetailPageState extends State<MealDetailPage> {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: GestureDetector(
-              onTap: toggleFavorite,
+              onTap: () {
+                setState(() {
+                  isFavorite = !isFavorite;
+                });
+              },
               child: Icon(
                 isFavorite ? Icons.favorite : Icons.favorite_outline,
                 color: isFavorite ? Color(0xFFDD1112) : null,

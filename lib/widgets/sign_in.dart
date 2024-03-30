@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:food_recipe/widgets/welcome.dart';
 import '/firebase_authentication/firebase_auth.dart';
 
 class MyLogin extends StatelessWidget {
@@ -98,12 +97,7 @@ class MyLogin extends StatelessWidget {
                                 content: Text("Đã đăng nhập thành công."),
                               ));
 
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => MyWelcome(),
-                                ),
-                              );;
+                              Navigator.of(context).popAndPushNamed("/welcome");
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                                 content: Text("Có lỗi đăng nhập."),

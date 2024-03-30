@@ -2,7 +2,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '/firebase_authentication/firebase_auth.dart';
-import 'home_page.dart';
 
 class MyWelcome extends StatelessWidget {
 
@@ -56,12 +55,8 @@ class MyWelcome extends StatelessWidget {
                         ),
                         child: ElevatedButton(
                           onPressed: () async {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => HomePage(),
-                              ),
-                            );
+                            await _auth.signOut();
+                            Navigator.of(context).popAndPushNamed("/home_page");
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.transparent,

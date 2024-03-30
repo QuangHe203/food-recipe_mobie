@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '/models/meal_model.dart';
 import '/models/api_services.dart';
 import 'meal_detail_page.dart';
-import 'components/bottom_navbar.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -272,20 +271,6 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                 ),
         ],
-      ),
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: 1, // Set the current index as needed
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.pushReplacementNamed(context, '/home');
-          } else if (index == 1) {
-            Navigator.pushReplacementNamed(context, '/search');
-          } else if (index == 2) {
-            Navigator.pushReplacementNamed(context, '/favourite');
-          } else if (index == 3) {
-            Navigator.pushReplacementNamed(context, '/setting');
-          }
-        },
       ),
     );
   }

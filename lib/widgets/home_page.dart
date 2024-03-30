@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import '/widgets/components/filter_container.dart';
 import '/models/api_services.dart';
-import '/widgets/meal_detail_page.dart';
-import 'components/bottom_navbar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,7 +13,7 @@ class _HomePageState extends State<HomePage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   late String incredient;
   late final List<String> meals = [];
-  late List<String> futureData = [];
+  late Future<List<dynamic>> futureData;
 
   List<bool> isCheckedList = [
     false,
@@ -43,30 +41,18 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    incredient = "chicken_breast";
-    fetchStrMeals(incredient).then((value) {
-      setState(() {
-        futureData = value;
-      });
-    });
+    incredient = "initial value";
+    futureData = APIServices.fetchMealsByIngredient(incredient);
   }
 
-  void toggleChecked(int index, bool newValue, String newIncredient) async {
+  void toggleChecked(int index, bool newValue, String newIncredient) {
     setState(() {
       for (int i = 0; i < isCheckedList.length; i++) {
         isCheckedList[i] = (i == index) ? newValue : false;
       }
       incredient = newIncredient;
+      futureData = APIServices.fetchMealsByIngredient(incredient);
     });
-
-    try {
-      final data = await fetchStrMeals(incredient);
-      setState(() {
-        futureData = data;
-      });
-    } catch (error) {
-      print('Error: $error');
-    }
   }
 
   @override
@@ -106,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           Padding(
                             padding:
-                            EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
+                                EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -179,7 +165,7 @@ class _HomePageState extends State<HomePage> {
               padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
               child: Container(
                 width: double.infinity,
-                height: 415,
+                height: 400,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   boxShadow: [
@@ -216,7 +202,7 @@ class _HomePageState extends State<HomePage> {
                           children: <Widget>[
                             FilterContainer(
                               imageUrl:
-                              'https://www.themealdb.com/images/ingredients/Lime.png',
+                                  'https://www.themealdb.com/images/ingredients/Lime.png',
                               text: 'Lemon',
                               width: 168,
                               isChecked: isCheckedList[0],
@@ -225,7 +211,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             FilterContainer(
                               imageUrl:
-                              'https://www.themealdb.com/images/ingredients/Chicken.png',
+                                  'https://www.themealdb.com/images/ingredients/Chicken.png',
                               text: 'Chicken',
                               width: 175,
                               isChecked: isCheckedList[1],
@@ -234,7 +220,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             FilterContainer(
                               imageUrl:
-                              'https://www.themealdb.com/images/ingredients/Salmon.png',
+                                  'https://www.themealdb.com/images/ingredients/Salmon.png',
                               text: 'Salmon',
                               width: 170,
                               isChecked: isCheckedList[2],
@@ -243,7 +229,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             FilterContainer(
                               imageUrl:
-                              'https://www.themealdb.com/images/ingredients/Beef.png',
+                                  'https://www.themealdb.com/images/ingredients/Beef.png',
                               text: 'Beef',
                               width: 140,
                               isChecked: isCheckedList[3],
@@ -252,7 +238,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             FilterContainer(
                               imageUrl:
-                              'https://www.themealdb.com/images/ingredients/Pork.png',
+                                  'https://www.themealdb.com/images/ingredients/Pork.png',
                               text: 'Pork',
                               width: 140,
                               isChecked: isCheckedList[4],
@@ -261,7 +247,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             FilterContainer(
                               imageUrl:
-                              'https://www.themealdb.com/images/ingredients/Avocado.png',
+                                  'https://www.themealdb.com/images/ingredients/Avocado.png',
                               text: 'Avocado',
                               width: 175,
                               isChecked: isCheckedList[5],
@@ -270,7 +256,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             FilterContainer(
                               imageUrl:
-                              'https://www.themealdb.com/images/ingredients/Bacon.png',
+                                  'https://www.themealdb.com/images/ingredients/Bacon.png',
                               text: 'Bacon',
                               width: 160,
                               isChecked: isCheckedList[6],
@@ -279,7 +265,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             FilterContainer(
                               imageUrl:
-                              'https://www.themealdb.com/images/ingredients/Aubergine.png',
+                                  'https://www.themealdb.com/images/ingredients/Aubergine.png',
                               text: 'Aubergine',
                               width: 205,
                               isChecked: isCheckedList[7],
@@ -288,7 +274,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             FilterContainer(
                               imageUrl:
-                              'https://www.themealdb.com/images/ingredients/Bread.png',
+                                  'https://www.themealdb.com/images/ingredients/Bread.png',
                               text: 'Bread',
                               width: 155,
                               isChecked: isCheckedList[8],
@@ -309,7 +295,7 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             FilterContainer(
                               imageUrl:
-                              'https://www.themealdb.com/images/ingredients/Broccoli.png',
+                                  'https://www.themealdb.com/images/ingredients/Broccoli.png',
                               text: 'Broccoli',
                               width: 175,
                               isChecked: isCheckedList[9],
@@ -318,7 +304,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             FilterContainer(
                               imageUrl:
-                              'https://www.themealdb.com/images/ingredients/Butter.png',
+                                  'https://www.themealdb.com/images/ingredients/Butter.png',
                               text: 'Butter',
                               width: 145,
                               isChecked: isCheckedList[10],
@@ -327,7 +313,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             FilterContainer(
                               imageUrl:
-                              'https://www.themealdb.com/images/ingredients/Carrot.png',
+                                  'https://www.themealdb.com/images/ingredients/Carrot.png',
                               text: 'Carrot',
                               width: 155,
                               isChecked: isCheckedList[11],
@@ -336,7 +322,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             FilterContainer(
                               imageUrl:
-                              'https://www.themealdb.com/images/ingredients/Cheese.png',
+                                  'https://www.themealdb.com/images/ingredients/Cheese.png',
                               text: 'Cheese',
                               width: 165,
                               isChecked: isCheckedList[12],
@@ -345,7 +331,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             FilterContainer(
                               imageUrl:
-                              'https://www.themealdb.com/images/ingredients/Cloves.png',
+                                  'https://www.themealdb.com/images/ingredients/Cloves.png',
                               text: 'Cloves',
                               width: 165,
                               isChecked: isCheckedList[13],
@@ -354,7 +340,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             FilterContainer(
                               imageUrl:
-                              'https://www.themealdb.com/images/ingredients/Coriander.png',
+                                  'https://www.themealdb.com/images/ingredients/Coriander.png',
                               text: 'Coriander',
                               width: 195,
                               isChecked: isCheckedList[14],
@@ -363,7 +349,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             FilterContainer(
                               imageUrl:
-                              'https://www.themealdb.com/images/ingredients/Cucumber.png',
+                                  'https://www.themealdb.com/images/ingredients/Cucumber.png',
                               text: 'Cucumber',
                               width: 195,
                               isChecked: isCheckedList[15],
@@ -372,7 +358,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             FilterContainer(
                               imageUrl:
-                              'https://www.themealdb.com/images/ingredients/Eggs.png',
+                                  'https://www.themealdb.com/images/ingredients/Eggs.png',
                               text: 'Eggs',
                               width: 145,
                               isChecked: isCheckedList[16],
@@ -381,7 +367,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             FilterContainer(
                               imageUrl:
-                              'https://www.themealdb.com/images/ingredients/Flour.png',
+                                  'https://www.themealdb.com/images/ingredients/Flour.png',
                               text: 'Flour',
                               width: 135,
                               isChecked: isCheckedList[17],
@@ -390,7 +376,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             FilterContainer(
                               imageUrl:
-                              'https://www.themealdb.com/images/ingredients/Lamb.png',
+                                  'https://www.themealdb.com/images/ingredients/Lamb.png',
                               text: 'Lamb',
                               width: 145,
                               isChecked: isCheckedList[18],
@@ -399,7 +385,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             FilterContainer(
                               imageUrl:
-                              'https://www.themealdb.com/images/ingredients/Mushrooms.png',
+                                  'https://www.themealdb.com/images/ingredients/Mushrooms.png',
                               text: 'Mushrooms',
                               width: 215,
                               isChecked: isCheckedList[19],
@@ -425,82 +411,76 @@ class _HomePageState extends State<HomePage> {
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
-                        mainAxisSize: MainAxisSize.min,
+                        mainAxisSize: MainAxisSize.max,
                         children: [
-                          for (final meal in futureData)
-                            FutureBuilder(
-                              future: fetchMealDetails(meal),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState == ConnectionState.waiting) {
-                                  return Padding(
-                                    padding: EdgeInsets.all(10),
-                                    child: CircularProgressIndicator(),
-                                  );
-                                } else if (snapshot.hasError) {
-                                  return Padding(
-                                    padding: EdgeInsets.all(10),
-                                    child: Text('Error: ${snapshot.error}'),
-                                  );
-                                } else {
-                                  final mealDetails = snapshot.data;
-                                  return GestureDetector(
-                                    onTap: () {
-                                      fetchMeals(mealDetails?.strMeal ?? '').then((meals) {
-                                        if (meals.isNotEmpty) {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => MealDetailPage(meal: meals[0], ),
-                                            ),
-                                          );
-                                        } else {
-                                        }
-                                      }).catchError((error) {
-                                      });
-                                    },
-
+                          /*FutureBuilder<List<dynamic>>(
+                            future: futureData ?? Future.value([]),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return CircularProgressIndicator();
+                              } else if (snapshot.hasError) {
+                                return Text('Error: ${snapshot.error}');
+                              } else {
+                                print("Data length: ${snapshot.data!.length}");
+                                return ListView.builder(
+                                  itemCount: snapshot.data!.length,
+                                  itemBuilder: (context, index) {
+                                    return Text(
+                                      snapshot.data![index]['strMeal'].toString().replaceAll(' ', '_').toLowerCase(),
+                                    );
+                                  },
+                                );
+                              }
+                            },
+                          ),*/
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
+                            child: Container(
+                              width: 260,
+                              height: 175,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: Image.network(
+                                    'https://images.unsplash.com/photo-1659813254494-fbf374803c7e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwxfHxjYWxtaW5nJTIwbmF0dXJlfGVufDB8fHx8MTcxMDkzMzgxMHww&ixlib=rb-4.0.3&q=80&w=1080',
+                                  ).image,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    blurRadius: 4,
+                                    color: Color(0x33000000),
+                                    offset: Offset(0, 2),
+                                  )
+                                ],
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              alignment: AlignmentDirectional(1, -1),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Align(
+                                    alignment: AlignmentDirectional.bottomStart,
                                     child: Padding(
-                                      padding: EdgeInsets.all(10),
-                                      child: Container(
-                                        width: 260,
-                                        height: 175,
-                                        decoration: BoxDecoration(
+                                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                                      child: Text(
+                                        'Ten mon a',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 20,
                                           color: Colors.white,
-                                          borderRadius: BorderRadius.circular(20),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              blurRadius: 4,
-                                              color: Color(0x33000000),
-                                              offset: Offset(0, 2),
-                                            )
-                                          ],
-                                          image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: NetworkImage(
-                                              mealDetails?.strMealThumb ?? '',
-                                            ),
-                                            onError: (exception, stackTrace) => NetworkImage('https://www.themealdb.com/images/media/meals/xrrtss1511555269.jpg'),
-                                          ),
-                                        ),
-                                        alignment: Alignment.bottomLeft,
-                                        child: Padding(
-                                          padding: EdgeInsets.all(10),
-                                          child: Text(
-                                            mealDetails?.strMeal ?? '',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 20,
-                                              color: Colors.white,
-                                              fontFamily: 'Roboto',
-                                            ),
-                                          ),
+                                          fontFamily: 'Roboto',
                                         ),
                                       ),
                                     ),
-                                  );
-                                }
-                              },
+                                  ),
+                                  // Thêm các phần tử khác nếu cần
+                                ],
+                              ),
+
                             ),
+                          ),
                         ],
                       ),
                     )
@@ -511,7 +491,7 @@ class _HomePageState extends State<HomePage> {
             ),
             Container(
               width: double.infinity,
-              height: 500, //350
+              height: 500,//350
               decoration: BoxDecoration(
                 color: Colors.white,
               ),
@@ -541,7 +521,7 @@ class _HomePageState extends State<HomePage> {
                           padding: EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
                           child: Container(
                             width: 280,
-                            height: 350, //300
+                            height: 350,//300
                             decoration: BoxDecoration(
                               color: Colors.white,
                               boxShadow: [
@@ -582,11 +562,11 @@ class _HomePageState extends State<HomePage> {
                                       children: [
                                         Align(
                                           alignment:
-                                          AlignmentDirectional(-1, 0),
+                                              AlignmentDirectional(-1, 0),
                                           child: Padding(
                                             padding:
-                                            EdgeInsetsDirectional.fromSTEB(
-                                                8, 0, 0, 5),
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    8, 0, 0, 5),
                                             child: Text(
                                               'Mỹ',
                                               style: TextStyle(
@@ -602,11 +582,11 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         Align(
                                           alignment:
-                                          AlignmentDirectional(-1, 0),
+                                              AlignmentDirectional(-1, 0),
                                           child: Padding(
                                             padding:
-                                            EdgeInsetsDirectional.fromSTEB(
-                                                8, 0, 0, 5),
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    8, 0, 0, 5),
                                             child: Text(
                                               '400 món',
                                               style: TextStyle(
@@ -628,7 +608,7 @@ class _HomePageState extends State<HomePage> {
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                        MainAxisAlignment.spaceEvenly,
                                     children: [
                                       Container(
                                         width: 80,
@@ -637,7 +617,7 @@ class _HomePageState extends State<HomePage> {
                                           color: Colors
                                               .white, // Sử dụng màu secondaryBackground từ Colors hoặc thay bằng một màu khác nếu cần
                                           borderRadius:
-                                          BorderRadius.circular(10),
+                                              BorderRadius.circular(10),
                                         ),
                                         child: Column(
                                           mainAxisSize: MainAxisSize.max,
@@ -663,16 +643,16 @@ class _HomePageState extends State<HomePage> {
                                                 color: Color(0xFFFEE044),
                                                 borderRadius: BorderRadius.only(
                                                   bottomLeft:
-                                                  Radius.circular(8),
+                                                      Radius.circular(8),
                                                   bottomRight:
-                                                  Radius.circular(8),
+                                                      Radius.circular(8),
                                                   topLeft: Radius.circular(0),
                                                   topRight: Radius.circular(0),
                                                 ),
                                               ),
                                               child: Align(
                                                 alignment:
-                                                AlignmentDirectional(0, 0),
+                                                    AlignmentDirectional(0, 0),
                                                 child: Text(
                                                   'Hamburger',
                                                   style: TextStyle(
@@ -695,7 +675,7 @@ class _HomePageState extends State<HomePage> {
                                         decoration: BoxDecoration(
                                           color: Colors.white,
                                           borderRadius:
-                                          BorderRadius.circular(10),
+                                              BorderRadius.circular(10),
                                         ),
                                         child: Column(
                                           mainAxisSize: MainAxisSize.max,
@@ -721,16 +701,16 @@ class _HomePageState extends State<HomePage> {
                                                 color: Color(0xFFFEE044),
                                                 borderRadius: BorderRadius.only(
                                                   bottomLeft:
-                                                  Radius.circular(8),
+                                                      Radius.circular(8),
                                                   bottomRight:
-                                                  Radius.circular(8),
+                                                      Radius.circular(8),
                                                   topLeft: Radius.circular(0),
                                                   topRight: Radius.circular(0),
                                                 ),
                                               ),
                                               child: Align(
                                                 alignment:
-                                                AlignmentDirectional(0, 0),
+                                                    AlignmentDirectional(0, 0),
                                                 child: Text(
                                                   'Hamburger',
                                                   style: TextStyle(
@@ -753,7 +733,7 @@ class _HomePageState extends State<HomePage> {
                                         decoration: BoxDecoration(
                                           color: Colors.white,
                                           borderRadius:
-                                          BorderRadius.circular(10),
+                                              BorderRadius.circular(10),
                                         ),
                                         child: Column(
                                           mainAxisSize: MainAxisSize.max,
@@ -779,16 +759,16 @@ class _HomePageState extends State<HomePage> {
                                                 color: Color(0xFFFEE044),
                                                 borderRadius: BorderRadius.only(
                                                   bottomLeft:
-                                                  Radius.circular(8),
+                                                      Radius.circular(8),
                                                   bottomRight:
-                                                  Radius.circular(8),
+                                                      Radius.circular(8),
                                                   topLeft: Radius.circular(0),
                                                   topRight: Radius.circular(0),
                                                 ),
                                               ),
                                               child: Align(
                                                 alignment:
-                                                AlignmentDirectional(0, 0),
+                                                    AlignmentDirectional(0, 0),
                                                 child: Text(
                                                   'Hamburger',
                                                   style: TextStyle(
@@ -816,7 +796,7 @@ class _HomePageState extends State<HomePage> {
                           padding: EdgeInsetsDirectional.fromSTEB(0, 0, 8, 0),
                           child: Container(
                             width: 280,
-                            height: 350, //300
+                            height: 350,//300
                             decoration: BoxDecoration(
                               color: Colors.white,
                               boxShadow: [
@@ -857,11 +837,11 @@ class _HomePageState extends State<HomePage> {
                                       children: [
                                         Align(
                                           alignment:
-                                          AlignmentDirectional(-1, 0),
+                                              AlignmentDirectional(-1, 0),
                                           child: Padding(
                                             padding:
-                                            EdgeInsetsDirectional.fromSTEB(
-                                                8, 0, 0, 5),
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    8, 0, 0, 5),
                                             child: Text(
                                               'Mỹ',
                                               style: TextStyle(
@@ -877,11 +857,11 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         Align(
                                           alignment:
-                                          AlignmentDirectional(-1, 0),
+                                              AlignmentDirectional(-1, 0),
                                           child: Padding(
                                             padding:
-                                            EdgeInsetsDirectional.fromSTEB(
-                                                8, 0, 0, 5),
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    8, 0, 0, 5),
                                             child: Text(
                                               '400 món',
                                               style: TextStyle(
@@ -903,7 +883,7 @@ class _HomePageState extends State<HomePage> {
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                        MainAxisAlignment.spaceEvenly,
                                     children: [
                                       Container(
                                         width: 80,
@@ -911,7 +891,7 @@ class _HomePageState extends State<HomePage> {
                                         decoration: BoxDecoration(
                                           color: Colors.white,
                                           borderRadius:
-                                          BorderRadius.circular(10),
+                                              BorderRadius.circular(10),
                                         ),
                                         child: Column(
                                           mainAxisSize: MainAxisSize.max,
@@ -937,16 +917,16 @@ class _HomePageState extends State<HomePage> {
                                                 color: Color(0xFFFEE044),
                                                 borderRadius: BorderRadius.only(
                                                   bottomLeft:
-                                                  Radius.circular(8),
+                                                      Radius.circular(8),
                                                   bottomRight:
-                                                  Radius.circular(8),
+                                                      Radius.circular(8),
                                                   topLeft: Radius.circular(0),
                                                   topRight: Radius.circular(0),
                                                 ),
                                               ),
                                               child: Align(
                                                 alignment:
-                                                AlignmentDirectional(0, 0),
+                                                    AlignmentDirectional(0, 0),
                                                 child: Text(
                                                   'Hamburger',
                                                   style: TextStyle(
@@ -969,7 +949,7 @@ class _HomePageState extends State<HomePage> {
                                         decoration: BoxDecoration(
                                           color: Colors.white,
                                           borderRadius:
-                                          BorderRadius.circular(10),
+                                              BorderRadius.circular(10),
                                         ),
                                         child: Column(
                                           mainAxisSize: MainAxisSize.max,
@@ -995,16 +975,16 @@ class _HomePageState extends State<HomePage> {
                                                 color: Color(0xFFFEE044),
                                                 borderRadius: BorderRadius.only(
                                                   bottomLeft:
-                                                  Radius.circular(8),
+                                                      Radius.circular(8),
                                                   bottomRight:
-                                                  Radius.circular(8),
+                                                      Radius.circular(8),
                                                   topLeft: Radius.circular(0),
                                                   topRight: Radius.circular(0),
                                                 ),
                                               ),
                                               child: Align(
                                                 alignment:
-                                                AlignmentDirectional(0, 0),
+                                                    AlignmentDirectional(0, 0),
                                                 child: Text(
                                                   'Hamburger',
                                                   style: TextStyle(
@@ -1027,7 +1007,7 @@ class _HomePageState extends State<HomePage> {
                                         decoration: BoxDecoration(
                                           color: Colors.white,
                                           borderRadius:
-                                          BorderRadius.circular(10),
+                                              BorderRadius.circular(10),
                                         ),
                                         child: Column(
                                           mainAxisSize: MainAxisSize.max,
@@ -1053,16 +1033,16 @@ class _HomePageState extends State<HomePage> {
                                                 color: Color(0xFFFEE044),
                                                 borderRadius: BorderRadius.only(
                                                   bottomLeft:
-                                                  Radius.circular(8),
+                                                      Radius.circular(8),
                                                   bottomRight:
-                                                  Radius.circular(8),
+                                                      Radius.circular(8),
                                                   topLeft: Radius.circular(0),
                                                   topRight: Radius.circular(0),
                                                 ),
                                               ),
                                               child: Align(
                                                 alignment:
-                                                AlignmentDirectional(0, 0),
+                                                    AlignmentDirectional(0, 0),
                                                 child: Text(
                                                   'Hamburger',
                                                   style: TextStyle(
@@ -1090,7 +1070,7 @@ class _HomePageState extends State<HomePage> {
                           padding: EdgeInsetsDirectional.fromSTEB(0, 0, 8, 0),
                           child: Container(
                             width: 280,
-                            height: 350, //300
+                            height: 350,//300
                             decoration: BoxDecoration(
                               color: Colors.white,
                               boxShadow: [
@@ -1131,11 +1111,11 @@ class _HomePageState extends State<HomePage> {
                                       children: [
                                         Align(
                                           alignment:
-                                          AlignmentDirectional(-1, 0),
+                                              AlignmentDirectional(-1, 0),
                                           child: Padding(
                                             padding:
-                                            EdgeInsetsDirectional.fromSTEB(
-                                                8, 0, 0, 5),
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    8, 0, 0, 5),
                                             child: Text(
                                               'Mỹ',
                                               style: TextStyle(
@@ -1151,11 +1131,11 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         Align(
                                           alignment:
-                                          AlignmentDirectional(-1, 0),
+                                              AlignmentDirectional(-1, 0),
                                           child: Padding(
                                             padding:
-                                            EdgeInsetsDirectional.fromSTEB(
-                                                8, 0, 0, 5),
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    8, 0, 0, 5),
                                             child: Text(
                                               '400 món',
                                               style: TextStyle(
@@ -1177,7 +1157,7 @@ class _HomePageState extends State<HomePage> {
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                        MainAxisAlignment.spaceEvenly,
                                     children: [
                                       Container(
                                         width: 80,
@@ -1185,7 +1165,7 @@ class _HomePageState extends State<HomePage> {
                                         decoration: BoxDecoration(
                                           color: Colors.white,
                                           borderRadius:
-                                          BorderRadius.circular(10),
+                                              BorderRadius.circular(10),
                                         ),
                                         child: Column(
                                           mainAxisSize: MainAxisSize.max,
@@ -1211,16 +1191,16 @@ class _HomePageState extends State<HomePage> {
                                                 color: Color(0xFFFEE044),
                                                 borderRadius: BorderRadius.only(
                                                   bottomLeft:
-                                                  Radius.circular(8),
+                                                      Radius.circular(8),
                                                   bottomRight:
-                                                  Radius.circular(8),
+                                                      Radius.circular(8),
                                                   topLeft: Radius.circular(0),
                                                   topRight: Radius.circular(0),
                                                 ),
                                               ),
                                               child: Align(
                                                 alignment:
-                                                AlignmentDirectional(0, 0),
+                                                    AlignmentDirectional(0, 0),
                                                 child: Text(
                                                   'Hamburger',
                                                   style: TextStyle(
@@ -1243,7 +1223,7 @@ class _HomePageState extends State<HomePage> {
                                         decoration: BoxDecoration(
                                           color: Colors.white,
                                           borderRadius:
-                                          BorderRadius.circular(10),
+                                              BorderRadius.circular(10),
                                         ),
                                         child: Column(
                                           mainAxisSize: MainAxisSize.max,
@@ -1269,16 +1249,16 @@ class _HomePageState extends State<HomePage> {
                                                 color: Color(0xFFFEE044),
                                                 borderRadius: BorderRadius.only(
                                                   bottomLeft:
-                                                  Radius.circular(8),
+                                                      Radius.circular(8),
                                                   bottomRight:
-                                                  Radius.circular(8),
+                                                      Radius.circular(8),
                                                   topLeft: Radius.circular(0),
                                                   topRight: Radius.circular(0),
                                                 ),
                                               ),
                                               child: Align(
                                                 alignment:
-                                                AlignmentDirectional(0, 0),
+                                                    AlignmentDirectional(0, 0),
                                                 child: Text(
                                                   'Hamburger',
                                                   style: TextStyle(
@@ -1301,7 +1281,7 @@ class _HomePageState extends State<HomePage> {
                                         decoration: BoxDecoration(
                                           color: Colors.white,
                                           borderRadius:
-                                          BorderRadius.circular(10),
+                                              BorderRadius.circular(10),
                                         ),
                                         child: Column(
                                           mainAxisSize: MainAxisSize.max,
@@ -1327,16 +1307,16 @@ class _HomePageState extends State<HomePage> {
                                                 color: Color(0xFFFEE044),
                                                 borderRadius: BorderRadius.only(
                                                   bottomLeft:
-                                                  Radius.circular(8),
+                                                      Radius.circular(8),
                                                   bottomRight:
-                                                  Radius.circular(8),
+                                                      Radius.circular(8),
                                                   topLeft: Radius.circular(0),
                                                   topRight: Radius.circular(0),
                                                 ),
                                               ),
                                               child: Align(
                                                 alignment:
-                                                AlignmentDirectional(0, 0),
+                                                    AlignmentDirectional(0, 0),
                                                 child: Text(
                                                   'Hamburger',
                                                   style: TextStyle(
@@ -1368,20 +1348,6 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: 0, // Set the current index as needed
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.pushReplacementNamed(context, '/home');
-          } else if (index == 1) {
-            Navigator.pushReplacementNamed(context, '/search');
-          } else if (index == 2) {
-            Navigator.pushReplacementNamed(context, '/favourite');
-          } else if (index == 3) {
-            Navigator.pushReplacementNamed(context, '/setting');
-          }
-        },
       ),
     );
   }
