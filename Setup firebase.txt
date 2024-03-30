@@ -1,0 +1,32 @@
+Lưu ý khi sử dụng firebase
+-> https://console.firebase.google.com/u/0/
+-> Create a project
+-> Authenciation
+-> Tạo một app mới bằng Androi Studio
+-> Project Overview 
+-> Bieu tuong android
+-> Về Studio -> Android -> app -> src -? buid.gradle -> defaultConfig -> Copy application ID
+-> Paste vao Adroid package name
+-> Dowload goole-services.json Về thư mục app
+-> Gõ vào build.gradle bên dưới
+buildscript {
+    ext.kotlin_version = '1.7.10'
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.google.gms:google-services:4.4.1"
+        classpath "com.android.tools.build:gradle-api:8.2.2"
+    }
+}
+
+-> Vào file build.gradle bên trên -> Thêm dòng id"com.google.gms.google-services" -> Continue
+
+-> Project Over view 
+-> Biểu tượng apple
+-> Thư mục IOS -> Runner.xcodeproj -> xcshareddata -> project.pbxproj
+PRODUCT_BUNDLE_IDENTIFIER -> Cpoy
+-> Paste vào thư mục runner
